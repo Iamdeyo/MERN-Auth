@@ -11,11 +11,15 @@ const app = express();
 
 const PORT = process.env.PORT || 8080;
 
+// middleware
+app.use(express.json()).use(express.urlencoded({ extended: true }));
+
 app.use('/api', router);
 app.get('/', (req, res) => {
   return res.send('testing');
 });
 
+// error middlewares
 app.use(notFound).use(errorHandler);
 
 app.listen(PORT, () => {
