@@ -4,6 +4,7 @@ dotenv.config();
 import connectDB from './config/db.js';
 import router from './routes/index.js';
 import { errorHandler, notFound } from './middlewares/errorMiddleware.js';
+import cookieParser from 'cookie-parser';
 
 connectDB();
 
@@ -12,7 +13,10 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 
 // middleware
-app.use(express.json()).use(express.urlencoded({ extended: true }));
+app
+  .use(express.json())
+  .use(express.urlencoded({ extended: true }))
+  .use(cookieParser('secret'));
 
 app.use('/api', router);
 app.get('/', (req, res) => {
