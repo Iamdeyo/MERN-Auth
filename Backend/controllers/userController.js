@@ -66,14 +66,42 @@ const logoutUser = asyncHandler(async (req, res) => {
 // @route GET api/users/profile
 // @access private
 const getUserProfile = asyncHandler(async (req, res) => {
-  return res.status(200).send('Get a User profile');
+  const user = {
+    _id: req.user._id,
+    name: req.user.name,
+    email: req.user.email,
+  };
+
+  return res.status(200).json({
+    data: user,
+    message: 'user profile',
+  });
 });
 
 // @desc update a user profile
 // @route PUT api/users/profile
 // @access private
 const updateUserProfile = asyncHandler(async (req, res) => {
-  return res.status(200).send('update a User profile');
+  const user = await User.findByIdAndUpdate(req.user._id);
+
+  if (user) {
+    user.name = req.body.name || user.name;
+    user.email = req.body.email || user.email;
+
+    if (req.body.password) {
+      user.password = req.body.password;
+    }
+
+    await user.save();
+
+    return res.status(200).json({
+      data: user,
+      message: 'user profile updated',
+    });
+  }
+
+  res.status(400);
+  throw new Error('Invaild request');
 });
 
 export {
