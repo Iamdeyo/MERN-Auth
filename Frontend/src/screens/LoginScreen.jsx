@@ -5,6 +5,7 @@ import FormContainer from '../components/FormContainer';
 import { useSelector, useDispatch } from 'react-redux';
 import { useLoginMutation } from '../slices/userApiSlice';
 import { setCredentials } from '../slices/authSlice';
+import { toast } from 'react-toastify';
 
 const LoginScreen = () => {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ const LoginScreen = () => {
       const res = await login({ email, password }).unwrap();
       dispatch(setCredentials(res));
     } catch (err) {
-      console.log(err?.data?.message || err.error);
+      toast.error(err?.data?.message || err.error);
     }
   };
 
